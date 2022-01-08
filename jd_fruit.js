@@ -1067,7 +1067,7 @@ async function collect() {
   try {
     await initForFarm();
     if ($.farmInfo.farmUserPro) {
-      pool.log($.userName,$.name,'FRUITSHARECODES',$.farmInfo.farmUserPro.shareCode);
+      pool.log($.UserName,$.name,'FRUITSHARECODES',$.farmInfo.farmUserPro.shareCode);
       //console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
       jdFruitShareArr.push($.farmInfo.farmUserPro.shareCode)
     } else {
