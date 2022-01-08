@@ -20,6 +20,9 @@ cron "2 0-23/4 * * *" script-path=jd_cash.js,tag=签到领现金
 ============小火箭=========
 签到领现金 = type=cron,script-path=jd_cash.js, cronexpr="2 0-23/4 * * *", timeout=3600, enable=true
  */
+
+const pool = require('./Pool')
+const ENV_NAME='JD_CASH_SHARECODES';
 const $ = new Env('签到领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -94,7 +97,8 @@ async function jdCash() {
   await appindex()
   await index()
 
-  await shareCodesFormat()
+  //await shareCodesFormat()
+  $.newShareCodes=pool.getCodeArr($.index,ENV_NAME)
   // await helpFriends()
   // await getReward()
   // await getReward('2');
@@ -152,7 +156,8 @@ async function appindex(info=false) {
               }
               $.signMoney = data.data.result.totalMoney;
               // console.log(`您的助力码为${data.data.result.invitedCode}`)
-              console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data.result.invitedCode}\n`);
+              //console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data.result.invitedCode}\n`);
+              pool.log($.UserName,$.name,ENV_NAME,data.data.result.invitedCode);
               let helpInfo = {
                 'inviteCode': data.data.result.invitedCode,
                 'shareDate': data.data.result.shareDate

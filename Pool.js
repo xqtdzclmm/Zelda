@@ -28,6 +28,7 @@ function getCodes(idx, env, randomNum = 20) {
         shareCodesRes = JSON.parse(shareCodesRes);
         console.log(`\n ================= 随机助力 ==============\n`)
         console.log(JSON.stringify(shareCodesRes.data))
+        console.log(`\n \n`)
         shareCodesRes.data = [...mergeCodes, ...new Set(shareCodesRes.data)]
         res = shareCodesRes;
     } else {
@@ -43,7 +44,12 @@ function getLocalCodes(i, env) {
     if (codes.length > 0) {
         codes = codes[i - 1];
     }
-    codes = codes && codes.indexOf('@') > -1 ? codes.split('@') : []
+    if (codes) {
+        codes = codes.replace("\r", "");
+        codes = codes.indexOf('@') > -1 ? codes.split('@') : []
+    } else {
+        codes = [];
+    }
     return codes;
 }
 

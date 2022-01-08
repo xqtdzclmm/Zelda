@@ -25,6 +25,8 @@ cron "1 7-21/2 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/syn
 京东种豆得豆 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_plantBean.js, cronexpr="1 7-21/2 * * *", timeout=3600, enable=true
 
 */
+const pool = require('./Pool')
+const ENV_NAME='PLANT_BEAN_SHARECODES';
 const $ = new Env('京东种豆得豆');
 //Node.js用户请在jdCookie.js处填写京东ck;
 //ios等软件用户直接用NobyDa的jd cookie
@@ -51,9 +53,6 @@ let randomCount = $.isNode() ? 20 : 5;
 let num;
 $.newShareCode = [];
 !(async () => {
-  if (!process.env.JD_JOIN_ZLC) {
-    console.log(`【注意】本脚本默认会给助力池进行助力！\n如需加入助力池请添加TG群：https://t.me/jd_zero_205\n如不加入助力池互助，可添加变量名称：JD_JOIN_ZLC，变量值：false\n`)
-  }
   await requireConfig();
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
@@ -88,7 +87,8 @@ $.newShareCode = [];
       cookie = cookiesArr[j];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = j + 1;
-      await shareCodesFormat();
+      //await shareCodesFormat();
+      newShareCodes=pool.getCodeArr($.index,ENV_NAME)
       await doHelp()
     }
   }
@@ -119,7 +119,8 @@ async function jdPlantBean() {
     if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0' && $.plantBeanIndexResult.data) {
       const shareUrl = $.plantBeanIndexResult.data.jwordShareInfo.shareUrl
       $.myPlantUuid = getParam(shareUrl, 'plantUuid')
-      console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.myPlantUuid}\n`);
+      pool.log($.UserName,$.name,ENV_NAME,$.myPlantUuid);
+      //console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.myPlantUuid}\n`);
       jdPlantBeanShareArr.push($.myPlantUuid)
 
       // ***************************
@@ -444,12 +445,9 @@ function showTaskProcess() {
 }
 //助力好友
 async function doHelp() {
-  if ($.isNode() && !process.env.PLANT_BEAN_SHARECODES) {
-    console.log(`您未填写助力码变量，开始账号内互助，再帮【zero205】助力`);
-    $.newShareCode = [...(jdPlantBeanShareArr || []), ...(newShareCodes || [])]
-  } else {
-    $.newShareCode = newShareCodes
-  }
+
+  $.newShareCode = newShareCodes
+
   for (let plantUuid of $.newShareCode) {
     console.log(`${$.UserName}开始助力: ${plantUuid}`);
     if (!plantUuid) continue;
