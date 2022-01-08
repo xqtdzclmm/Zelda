@@ -53,7 +53,7 @@ function getLocalCodes(i, env) {
 function log(ptPin, activityName, env, code) {
     console.log('================ 助力码 ====================')
     console.log(`         活动名称：${activityName}\r\n`)
-    console.log(`         ptPin：${ptPin}\r\n`)
+    console.log(`         用户：${ptPin}\r\n`)
     console.log(`         助力码：${code}\r\n`)
     console.log(`         环境变量：${env}\r\n`)
     console.log('==================================== \r\n')

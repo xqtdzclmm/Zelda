@@ -105,7 +105,7 @@ const ZLC = !(process.env.JD_JOIN_ZLC && process.env.JD_JOIN_ZLC === 'false')
       option = {};
       $.retry = 0;
       //await shareCodesFormat();
-      newShareCodes=pool.getCodes($.index,'FRUITSHARECODES','东东农场')
+      newShareCodes=pool.getCodes($.index,'FRUITSHARECODES')
       await jdFruit();
     }
   }
@@ -1067,7 +1067,8 @@ async function collect() {
   try {
     await initForFarm();
     if ($.farmInfo.farmUserPro) {
-      console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
+      pool.log($.userName,$.name,'FRUITSHARECODES',$.farmInfo.farmUserPro.shareCode);
+      //console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
       jdFruitShareArr.push($.farmInfo.farmUserPro.shareCode)
     } else {
       console.log(`初始化农场数据异常, 请登录京东 app查看农场0元水果功能是否正常,农场初始化数据: ${JSON.stringify($.farmInfo)}`);
