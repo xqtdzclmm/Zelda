@@ -16,7 +16,7 @@ function getCodes(idx, env, randomNum = 20) {
     let mergeCodes = [];
     if (env) {
         mergeCodes = getLocalCodes(idx, env)
-        console.log(`\n ================= 固有助力码 ==============\n`)
+        console.log(`\n ================= 固有助力 ==============\n`)
         console.log(JSON.stringify(mergeCodes))
     }
     let restful = process.env.POOL_RESTFUL;
@@ -26,7 +26,7 @@ function getCodes(idx, env, randomNum = 20) {
         const url = restful ? `${prefix}/${randomNum}` : `${prefix}?num=${randomNum}`
         let shareCodesRes = req('GET', url).getBody();
         shareCodesRes = JSON.parse(shareCodesRes);
-        console.log(`\n =========== 从池中随机获取得助力码 ===========\n`)
+        console.log(`\n ================= 随机助力 ==============\n`)
         console.log(JSON.stringify(shareCodesRes.data))
         shareCodesRes.data = [...mergeCodes, ...new Set(shareCodesRes.data)]
         res = shareCodesRes;
