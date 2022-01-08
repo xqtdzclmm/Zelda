@@ -25,6 +25,11 @@
 
 - https://sharec.siber.cn:889
 
+# 使用说明
+    仅支持青龙面板
+
+    ql repo https://ghproxy.com/https://github.com/xqtdzclmm/Zelda.git "jd_|jx_|getJDCookie|Pool" "backUp|icon" "^jd[^_]|USER|sendNotify|sign_graphics_validate|JDJR|JDSign" "main"
+
 
 # 贡献说明
 
