@@ -18,11 +18,12 @@
   "dependencies": {
     "crypto-js": "^4.1.1",
     "got": "^11.8.2",
+    "jsdom": "^17.0.0",
     "png-js": "^1.0.0",
     "request": "^2.88.2",
+    "sync-request": "^6.1.0",
     "tough-cookie": "^4.0.0",
     "tunnel": "0.0.6",
-    "ws": "^7.5.3",
-    "jsdom": "^17.0.0"
+    "ws": "^7.5.3"
   }
 }
