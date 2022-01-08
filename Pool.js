@@ -15,7 +15,7 @@ function getCodes(idx, env, randomNum = 20) {
         mergeCodes = getLocalCodes(idx, env)
         console.log(`\n ================= 固有助力码 ==============\n`)
         for (let i = 0; i < mergeCodes.length; i++) {
-            console.log(`                ${mergeCodes[i]}\n`);
+            console.log(`   ${mergeCodes[i]}\n`);
         }
     }
     let restful = process.env.POOL_RESTFUL;
