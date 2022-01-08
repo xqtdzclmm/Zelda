@@ -28,6 +28,8 @@ jd免费水果 搬的https://github.com/liuxiaoyucc/jd-helper/blob/a6f275d978574
 */
 const pool = require('./Pool')
 const $ = new Env('东东农场');
+const ENV_NAME="FRUITSHARECODES";
+
 let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
 //助力好友分享码(最多3个,否则后面的助力失败),原因:京东农场每人每天只有3次助力机会
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
@@ -105,7 +107,7 @@ const ZLC = !(process.env.JD_JOIN_ZLC && process.env.JD_JOIN_ZLC === 'false')
       option = {};
       $.retry = 0;
       //await shareCodesFormat();
-      newShareCodes=pool.getCodeArr($.index,'FRUITSHARECODES')
+      newShareCodes=pool.getCodeArr($.index,ENV_NAME)
       await jdFruit();
     }
   }
@@ -1067,7 +1069,7 @@ async function collect() {
   try {
     await initForFarm();
     if ($.farmInfo.farmUserPro) {
-      pool.log($.UserName,$.name,'FRUITSHARECODES',$.farmInfo.farmUserPro.shareCode);
+      pool.log($.UserName,$.name,ENV_NAME,$.farmInfo.farmUserPro.shareCode);
       //console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
       jdFruitShareArr.push($.farmInfo.farmUserPro.shareCode)
     } else {
