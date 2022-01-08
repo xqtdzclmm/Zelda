@@ -1,12 +1,15 @@
-
 const req = require('sync-request');
 
 
 module.exports = {
     getCodes,
-    log
+    log,
+    getCodeArr
 }
 
+function getCodeArr(idx, env, randomNum = 20) {
+    return getCodes(idx, env, randomNum).data;
+}
 
 function getCodes(idx, env, randomNum = 20) {
     let res = {};

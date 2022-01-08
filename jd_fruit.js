@@ -105,7 +105,7 @@ const ZLC = !(process.env.JD_JOIN_ZLC && process.env.JD_JOIN_ZLC === 'false')
       option = {};
       $.retry = 0;
       //await shareCodesFormat();
-      newShareCodes=pool.getCodes($.index,'FRUITSHARECODES')
+      newShareCodes=pool.getCodeArr($.index,'FRUITSHARECODES')
       await jdFruit();
     }
   }
