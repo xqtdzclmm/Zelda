@@ -5,21 +5,19 @@ exports.main_handler = async (event, context, callback) => {
     if (event["TriggerName"] == 'remote') {
         console.log('remote触发:', event["Message"])
         const got = require('got')
-        let response
-        try {
-            response = await got(`https://raw.fastgit.org/zero205/JD_tencent_scf/main/${event["Message"]}.js`, {
-                timeout: 3000,
-                retry: 0
-            })
-        } catch (error) {
-            console.error(`got error:`, error)
-            console.error(`retry raw link`)
-            response = await got(`https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/${event["Message"]}.js`, {
-                timeout: 3000,
-                retry: 0
-            })
+        const links = ['https://raw.fastgit.org/zero205/JD_tencent_scf/main/','https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/']
+        for (let i = 0; i < links.length; i++) {
+            try {
+                const { body } = await got(`${links[i]}${event["Message"]}.js`, {
+                    timeout: 5000,
+                    retry: 2
+                })
+                eval(body)
+                break
+            } catch (error) {
+                console.error(`got error:`, error)
+            }
         }
-        eval(response.body)
         return
     } else if (event["TriggerName"] == 'config') {
         let now_hour = (new Date().getUTCHours() + 8) % 24
@@ -32,9 +30,9 @@ exports.main_handler = async (event, context, callback) => {
             }
         }
         const { readFileSync, accessSync, constants } = require('fs')
-        const config_file = 'config.json'
+        const config_file = process.cwd() + '/config.json'
         try {
-            await accessSync('./' + config_file, constants.F_OK)
+            await accessSync(config_file, constants.F_OK)
             console.log(`${config_file} 存在`)
         } catch (err) {
             console.error(`${config_file} 不存在,结束`)
@@ -51,9 +49,9 @@ exports.main_handler = async (event, context, callback) => {
         params = config['params']
         delete config['params']
 
-        const config_diy_file = 'config_diy.json'
+        const config_diy_file = process.cwd() + '/config_diy.json'
         try {
-            await accessSync('./' + config_diy_file, constants.F_OK)
+            await accessSync(config_diy_file, constants.F_OK)
             console.log(`${config_diy_file} 存在`)
             const config_diy = JSON.parse(await readFileSync(config_diy_file))
             if (config_diy['params']) {
