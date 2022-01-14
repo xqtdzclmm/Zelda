@@ -191,6 +191,7 @@ async function pasture() {
       }
       console.log('获取活动信息成功');
       console.log(`互助码：${$.homeInfo.sharekey}`);
+      pool.log($.UserName,$.name,ENV_NAME,$.homeInfo.sharekey);
       $.taskList = [], $.dateType = ``, $.source = `jxmc`, $.bizCode = `jxmc`;
       await takeGetRequest('GetUserTaskStatusList');
       for (let key of Object.keys($.taskList)) {

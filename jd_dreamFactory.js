@@ -686,6 +686,8 @@ function userInfo() {
                 console.log(`当前电力：${data.user.electric}`)
                 console.log(`当前等级：${data.user.currentLevel}`)
                 console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.user.encryptPin}`);
+                pool.log($.UserName,$.name,ENV_NAME,data.user.encryptPin);
+
                 jdDreamFactoryShareArr.push(data.user.encryptPin)
                 console.log(`已投入电力：${production.investedElectric}`);
                 console.log(`所需电力：${production.needElectric}`);

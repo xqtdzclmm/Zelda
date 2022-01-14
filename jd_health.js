@@ -152,6 +152,7 @@ function getTaskDetail(taskId = '') {
             } else if (taskId === 6) {
               if (oc(() => data.data.result.taskVos)) {
                 console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${oc(() => data.data.result.taskVos[0].assistTaskDetailVo.taskToken)}\n`);
+                pool.log($.UserName,$.name,ENV_NAME,${oc(() => data.data.result.taskVos[0].assistTaskDetailVo.taskToken)});
                 // console.log('好友助力码：' + oc(() => data.data.result.taskVos[0].assistTaskDetailVo.taskToken))
                 // ***************************
                 // 报告运行次数
