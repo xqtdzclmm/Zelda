@@ -22,6 +22,8 @@ cron "30 0,6-23 * * *" script-path=https://raw.githubusercontent.com/zero205/JD_
 摇钱树助力 = type=cron,script-path=https://raw.githubusercontent.com/zero205/JD_tencent_scf/main/jd_moneyTree_help.js, cronexpr="30 0,6-23 * * *", timeout=200, enable=true
 *
 */
+const pool = require('./Pool')
+const ENV_NAME="MONEYTREE_SHARECODES";
 const $ = new Env('京东摇钱树助力');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -96,7 +98,8 @@ $.shareCodes = []
       console.log(`\n****开始【京东账号${$.index}】${$.nickName || $.UserName}****\n`);
       message = '';
       subTitle = '';
-      await shareCodesFormat();
+      // await shareCodesFormat();
+      $.newShareCodes = pool.getCodeArr($.index,ENV_NAME)
       await $.wait(1000);
       await helpFriends();
     }

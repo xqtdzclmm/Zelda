@@ -19,6 +19,8 @@ cron "13 0,6,22 * * *" script-path=jd_health.js, tag=东东健康社区
 ============小火箭=========
 东东健康社区 = type=cron,script-path=jd_health.js, cronexpr="13 0,6,22 * * *", timeout=3600, enable=true
  */
+const pool = require('./Pool')
+const ENV_NAME="JDHEALTH_SHARECODES";
 const $ = new Env("东东健康社区");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 const notify = $.isNode() ? require('./sendNotify') : "";
@@ -66,7 +68,8 @@ const JD_API_HOST = "https://api.m.jd.com/";
       $.index = i + 1;
       message = "";
       console.log(`\n******开始【京东账号${$.index}】${$.UserName}*********\n`);
-      await shareCodesFormat()
+      // await shareCodesFormat()
+      $.newShareCodes = pool.getCodeArr($.index,ENV_NAME)
       await main()
       await showMsg()
     }
