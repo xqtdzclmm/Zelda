@@ -10,6 +10,8 @@
 #柠檬赚金币
 0 7 * * * http://nm66.top/jd_zjb.js, tag=柠檬赚金币, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
+const pool = require('./Pool')
+const ENV_NAME="NM_ZJB";
 const $ = new Env('柠檬赚金币');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -17,14 +19,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
-let InviterPin = '';
 
-if ($.isNode() && process.env.InviterPin) {
-  InviterPin = process.env.InviterPin;
-}
-if (InviterPin.length == 0) {
-  console.log(`\n您未填写邀请码变量，默认帮【zero205】助力\n`);
-}
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -60,11 +55,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         continue
       }
       await info()
-      if (InviterPin.length != 0) {
-        await help()
-      } else {
-        await help2("zero205",Math.random() > 0.5 ? "%2FeNHdfn6fP%2BTFwVda3ipjWwvTFqeKBZaRG38adWABKk%3D" : "Sev6JWjut6GyaEHJIWpSQQ%3D%3D")        
-      }
+
+      await newHelp()
     }
   }
 })()
@@ -74,7 +66,14 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
   .finally(() => {
     $.done();
   })
-
+async function newHelp(){
+  newShareCodes=pool.getCodeArr($.index,ENV_NAME)
+  if (newShareCodes){
+    for (let i = 0; i < newShareCodes.length; i++) {
+       await help2(newShareCodes[i]);
+    }
+  }
+}
 function info() {
   return new Promise(async (resolve) => {
     let options = {
@@ -95,7 +94,8 @@ function info() {
           reust = JSON.parse(data)
         }
         if (reust.code === 0) {
-          $.log("\n【您的赚金币邀请码为】" + reust.data.encryptionInviterPin)
+          //$.log("\n【您的赚金币邀请码为】" + reust.data.encryptionInviterPin)
+          pool.log($.UserName,$.name,ENV_NAME,reust.data.encryptionInviterPin);
         } else
           console.log(data.message)
       } catch (e) {
@@ -135,7 +135,7 @@ function help() {
   });
 }
 
-function help2(name,code) {
+function help2(code) {
   return new Promise(async (resolve) => {
     let options = {
       url: `https://api.m.jd.com`,
@@ -152,7 +152,7 @@ function help2(name,code) {
       try {
         const reust = JSON.parse(data)
         if (reust.code === 0) {
-          $.log(`赚金币助力【${name}】成功，感谢！`)
+          $.log(`赚金币助力【${code}】成功，感谢！`)
         } else
           console.log(reust.message)
       } catch (e) {

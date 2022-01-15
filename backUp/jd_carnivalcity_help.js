@@ -19,6 +19,8 @@ cron "10 0,8 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/
 ============小火箭=========
 京东手机狂欢城助力 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_carnivalcity_help.js, cronexpr="10 0,8 * * *", timeout=3600, enable=true
 */
+const pool = require('./Pool')
+const ENV_NAME="JDSJKHC";
 const $ = new Env('京东手机狂欢城助力');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -77,13 +79,15 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
       await $.wait(1000)
     }
   }
-  await shareCodesFormat();
+  //await shareCodesFormat();
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       if (!isLoginInfo[$.UserName] || blockAccountInfo[$.UserName]) continue
       $.canHelp = true;
+      $.newShareCodes=pool.getCodeArr(i+1,ENV_NAME)
+
       if ($.newShareCodes && $.newShareCodes.length) {
         console.log(`\n开始助力`);
         for (let j = 0; j < $.newShareCodes.length && $.canHelp; j++) {
@@ -209,7 +213,8 @@ function getHelp() {
           data = JSON.parse(data);
           if (data.code === 200) {
             console.log(`\n\n${$.name}互助码每天都变化,旧的不可继续使用`);
-            $.log(`【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data.shareId}\n\n`);
+            pool.log($.UserName,$.name,ENV_NAME,data.data.shareId);
+            //$.log(`【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data.shareId}\n\n`);
             $.shareCodes.push(data.data.shareId);
           } else {
             console.log(`获取邀请码失败：${JSON.stringify(data)}`);
@@ -258,42 +263,7 @@ function getAuthorShareCode(url) {
   })
 }
 
-function readShareCode() {
-  return new Promise(async resolve => {
-    $.get({url: `http://transfer.nz.lu/carnivalcity`, 'timeout': 20000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(20000);
-    resolve()
-  })
-}
-//格式化助力码
-function shareCodesFormat() {
-  return new Promise(async resolve => {
-    $.newShareCodes = [];
-    const readShareCodeRes = await readShareCode();
-    if (readShareCodeRes && readShareCodeRes.code === 200) {
-      $.newShareCodes = [...new Set([...$.shareCodes, ...$.updatePkActivityIdRes, ...(readShareCodeRes.data || [])])];
-    } else {
-      $.newShareCodes = [...new Set([...$.shareCodes, ...$.updatePkActivityIdRes])];
-    }
-    console.log(`\n\n您将要助力的好友${JSON.stringify($.newShareCodes)}`)
-    resolve();
-  })
-}
+
 
 function taskUrl(body = {}) {
   return {

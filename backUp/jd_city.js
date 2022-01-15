@@ -22,6 +22,9 @@ cron "0 0-23/5 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/maste
 ====================================小火箭=============================
 城城领现金 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_city.js, cronexpr="0 0-23/5 * * *", timeout=3600, enable=true
  */
+const pool = require('./Pool')
+const ENV_NAME="CC_CASH";
+//TODO 暂时无效
 const $ = new Env('城城领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -253,68 +256,7 @@ function city_lotteryAward() {
     })
   })
 }
-function readShareCode(num=3) {
-  return new Promise(async resolve => {
-    $.get({url: `https://api.jdsharecode.xyz/api/city/${num}`, 'timeout': 10000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(10000);
-    resolve()
-  })
-}
-//格式化助力码
-function shareCodesFormat() {
-  return new Promise(async resolve => {
-    // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
-    $.newShareCodes = []
-    const readShareCodeRes = await readShareCode(3);
-    if (readShareCodeRes && readShareCodeRes.code === 200) {
-      pool = readShareCodeRes.data || [];
-    }
-    if ($.isNode()) {
-      if (process.env.JD_CITY_EXCHANGE) {
-        exchangeFlag = process.env.JD_CITY_EXCHANGE || exchangeFlag;
-      }
-      if (process.env.CITY_SHARECODES) {
-        console.log('检测到助力码,优先. 内部互助0.01了吧,删了吧.')
-        if (process.env.CITY_SHARECODES.indexOf('\n') > -1) {
-          $.newShareCodes = process.env.CITY_SHARECODES.split('\n');
-        } else {
-          $.newShareCodes = process.env.CITY_SHARECODES.split('&');
-        }
-      }
-    }
-    // if ($.index - 1 == 0) {
-    //   console.log('首个帐号,助力作者和池子')
-    //   $.newShareCodes = [...new Set([...$.newShareCodes,...author_codes, ...pool])];
-    // } else {
-    //   console.log('非首个个帐号,优先向前助力')
-    //   $.newShareCodes = [...new Set([...$.newShareCodes,...self_code,...author_codes, ...pool])]
-    // }
-    if ($.index == 1) {
-      console.log('首个帐号,助力作者和池子')
-      $.newShareCodes = [...new Set([...author_codes,...pool,...$.newShareCodes])]
-    } else{
-      console.log('非首个帐号,助力池子')
-      $.newShareCodes = [...new Set([...$.newShareCodes,...pool])]
-    }
-    console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
-    resolve();
-  })
-}
+
 function requireConfig() {
   return new Promise(resolve => {
     console.log(`开始获取${$.name}配置文件\n`);

@@ -201,7 +201,6 @@ async function pasture() {
           if (vo.completedTimes >= vo.configTargetTimes) {
             console.log(`助力已满，不上传助力码`)
           } else {
-            await uploadShareCode($.homeInfo.sharekey)
             $.inviteCodeList.push($.homeInfo.sharekey);
             await $.wait(2000)
           }
@@ -907,77 +906,7 @@ function getAuthorShareCode(url) {
   })
 }
 
-//格式化助力码
-function shareCodesFormat() {
-  return new Promise(async resolve => {
-    $.newShareCodes = []
-    const readShareCodeRes = await readShareCode();
-    if (readShareCodeRes && readShareCodeRes.code === 200) {
-      $.newShareCodes = [...new Set([...$.inviteCodeList, ...($.res || []), ...(readShareCodeRes.data || [])])];
-    } else {
-      $.newShareCodes = [...new Set([...$.inviteCodeList, ...($.res || [])])];
-    }
-    console.log(`\n您将要助力的好友${JSON.stringify($.newShareCodes)}`)
-    resolve();
-  })
-}
-function readShareCode() {
-  return new Promise(async resolve => {
-    $.get({url: `https://transfer.nz.lu/jxmc`, timeout: 30 * 1000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(JSON.stringify(err))
-          console.log(`${$.name} readShareCode API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            console.log(`\n随机取20个码放到您固定的互助码后面(不影响已有固定互助)`)
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(30 * 1000);
-    resolve()
-  })
-}
-function uploadShareCode(code) {
-  return new Promise(async resolve => {
-    $.post({url: `https://transfer.nz.lu/upload/jxmc?code=${code}&ptpin=${encodeURIComponent(encodeURIComponent($.UserName))}`, timeout: 30 * 1000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(JSON.stringify(err))
-          console.log(`${$.name} uploadShareCode API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            if (data === 'OK') {
-              console.log(`已自动提交助力码`)
-            } else if (data === 'error') {
-              console.log(`助力码格式错误，乱玩API是要被打屁屁的~`)
-            } else if (data === 'full') {
-              console.log(`车位已满，请等待下一班次`)
-            } else if (data === 'exist') {
-              console.log(`助力码已经提交过了~`)
-            } else if (data === 'not in whitelist') {
-              console.log(`提交助力码失败，此用户不在白名单中`)
-            } else {
-              console.log(`未知错误：${data}`)
-            }
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(30 * 1000);
-    resolve()
-  })
-}
+
 
 function decrypt(time, stk, type, url) {
   stk = stk || (url ? getUrlData(url, '_stk') : '')
