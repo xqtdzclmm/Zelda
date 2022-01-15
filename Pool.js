@@ -58,6 +58,7 @@ function getLocalCodes(i, env) {
 
 function log(ptPin, activityName, env, code) {
     console.log('================ 助力码 ====================')
+    console.log('  提示：接入xxoo类助力池时，无需手动处理，自动上报')
     console.log(`         活动名称：${activityName}\r\n`)
     console.log(`         用户：${ptPin}\r\n`)
     console.log(`         助力码：${code}\r\n`)
