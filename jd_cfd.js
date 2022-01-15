@@ -111,12 +111,12 @@ if ($.isNode()) {
   }
   $.strMyShareIds = [...(res && res.shareId || []), ...(res2 || [])]
   // await shareCodesFormat()
-  $.newShareCodes = pool.getCodeArr($.index,ENV_NAME)
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
     $.canHelp = true
     UA = UAInfo[$.UserName]
+    $.newShareCodes = pool.getCodeArr(i+1,ENV_NAME)
     if ($.newShareCodes && $.newShareCodes.length) {
       console.log(`\n开始互助\n`);
       for (let j = 0; j < $.newShareCodes.length && $.canHelp; j++) {
