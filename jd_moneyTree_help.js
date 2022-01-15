@@ -144,7 +144,7 @@ function getsharePin() {
               if (res.resultData.data) {
                 userInfo = res.resultData.data;
                 if (userInfo.realName) {
-                  console.log(`【京东账号${$.index}（${$.UserName}）的摇钱树好友互助码】${userInfo.sharePin}`);
+                  //console.log(`【京东账号${$.index}（${$.UserName}）的摇钱树好友互助码】${userInfo.sharePin}`);
                   pool.log($.UserName,$.name,ENV_NAME,userInfo.sharePin);
                   $.shareCodes.push(userInfo.sharePin)
                 } else {

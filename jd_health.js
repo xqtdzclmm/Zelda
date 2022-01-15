@@ -30,7 +30,7 @@ const inviteCodes = [
   `T0225KkcRh9P9FbRKUygl_UJcgCjVfnoaW5kRrbA@T0159KUiH11Mq1bSKBoCjVfnoaW5kRrbA@T018v_hzQhwZ8FbUIRib1ACjVfnoaW5kRrbA`,
   `T0225KkcRh9P9FbRKUygl_UJcgCjVfnoaW5kRrbA@T0159KUiH11Mq1bSKBoCjVfnoaW5kRrbA@T018v_hzQhwZ8FbUIRib1ACjVfnoaW5kRrbA`,
 ]
-const ZLC = !(process.env.JD_JOIN_ZLC && process.env.JD_JOIN_ZLC === 'false')
+const ZLC = true
 let reward = process.env.JD_HEALTH_REWARD_NAME ? process.env.JD_HEALTH_REWARD_NAME : ''
 const randomCount = $.isNode() ? 20 : 5;
 function oc(fn, defaultVal) {//optioanl chaining
@@ -56,9 +56,6 @@ const JD_API_HOST = "https://api.m.jd.com/";
   if (!cookiesArr[0]) {
     $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/", {"open-url": "https://bean.m.jd.com/"});
     return;
-  }
-  if (!process.env.JD_JOIN_ZLC) {
-    console.log(`【注意】本脚本默认会给助力池进行助力！\n如需加入助力池请添加TG群：https://t.me/jd_zero_205\n如不加入助力池互助，可添加变量名称：JD_JOIN_ZLC，变量值：false\n`)
   }
   await requireConfig()
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -151,8 +148,8 @@ function getTaskDetail(taskId = '') {
               }
             } else if (taskId === 6) {
               if (oc(() => data.data.result.taskVos)) {
-                console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${oc(() => data.data.result.taskVos[0].assistTaskDetailVo.taskToken)}\n`);
-                pool.log($.UserName,$.name,ENV_NAME,${oc(() => data.data.result.taskVos[0].assistTaskDetailVo.taskToken)});
+                //console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${oc(() => data.data.result.taskVos[0].assistTaskDetailVo.taskToken)}\n`);
+                pool.log($.UserName,$.name,ENV_NAME,oc(() => data.data.result.taskVos[0].assistTaskDetailVo.taskToken));
                 // console.log('好友助力码：' + oc(() => data.data.result.taskVos[0].assistTaskDetailVo.taskToken))
                 // ***************************
                 // 报告运行次数

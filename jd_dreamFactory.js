@@ -67,9 +67,6 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 !(async () => {
-  if (!process.env.JD_JOIN_ZLC) {
-    console.log(`【注意】本脚本默认会给助力池进行助力！\n如需加入助力池请添加TG群：https://t.me/jd_zero_205\n如不加入助力池互助，可添加变量名称：JD_JOIN_ZLC，变量值：false\n`)
-  }
   $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
   await requireConfig();
   if (!cookiesArr[0]) {
@@ -467,12 +464,7 @@ async function helpFriends() {
   if ($.canHelpFlag) {
     // await shareCodesFormat();
     newShareCodes = pool.getCodeArr($.index,ENV_NAME)
-    if ($.isNode() && !process.env.DREAM_FACTORY_SHARE_CODES) {
-      console.log(`您未填写助力码变量，开始账号内互助，再帮【zero205】助力`);
-      $.newShareCode = [...(jdDreamFactoryShareArr || []), ...(newShareCodes || [])]
-    } else {
-      $.newShareCode = newShareCodes
-    }
+    $.newShareCode = newShareCodes
     for (let code of $.newShareCode) {
       if (code) {
         if ($.encryptPin === code) {
@@ -683,10 +675,12 @@ function userInfo() {
                 } else {
                   $.log(`再加${productionStage['productionStageProgress']}电力可开红包\n`)
                 }
+
+                pool.log($.UserName,$.name,ENV_NAME,data.user.encryptPin);
+
                 console.log(`当前电力：${data.user.electric}`)
                 console.log(`当前等级：${data.user.currentLevel}`)
-                console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.user.encryptPin}`);
-                pool.log($.UserName,$.name,ENV_NAME,data.user.encryptPin);
+                //console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.user.encryptPin}`);
 
                 jdDreamFactoryShareArr.push(data.user.encryptPin)
                 console.log(`已投入电力：${production.investedElectric}`);

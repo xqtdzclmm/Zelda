@@ -126,6 +126,7 @@ if ($.isNode()) {
     $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
     $.canHelp = true;
     $.index = i + 1;
+    $.newShareCodes = pool.getCodeArr($.index,ENV_NAME)
     UA = UAInfo[$.UserName]
     token = await getJxToken()
     if ($.newShareCodes && $.newShareCodes.length) {
@@ -190,7 +191,7 @@ async function pasture() {
         }
       }
       console.log('获取活动信息成功');
-      console.log(`互助码：${$.homeInfo.sharekey}`);
+      //console.log(`互助码：${$.homeInfo.sharekey}`);
       pool.log($.UserName,$.name,ENV_NAME,$.homeInfo.sharekey);
       $.taskList = [], $.dateType = ``, $.source = `jxmc`, $.bizCode = `jxmc`;
       await takeGetRequest('GetUserTaskStatusList');
