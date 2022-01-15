@@ -40,6 +40,9 @@ function getCodes(idx, env, randomNum = 20) {
 
 function getLocalCodes(i, env) {
     let localCodes = eval(`process.env.${env}`)
+    if (!localCodes) {
+        return [];
+    }
     var codes = localCodes.split('&')
     if (codes.length > 0) {
         codes = codes[i - 1];
