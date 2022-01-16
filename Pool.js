@@ -14,14 +14,20 @@ function getCodeArr(idx, env, randomNum = 20) {
 function getCodes(idx, env, randomNum = 20) {
     let res = {};
     let mergeCodes = [];
-    if (env) {
+
+    let useLocal = process.env.HELP_LOCAL === 'false'?false:true;
+    let usePool = process.env.HELP_POOL === 'false'?false:true;
+
+    if (useLocal) {
         mergeCodes = getLocalCodes(idx, env)
         console.log(`\n ================= 固有助力 ==============\n`)
         console.log(JSON.stringify(mergeCodes))
     }
+
     let restful = process.env.POOL_RESTFUL;
-    const poolUrl = process.env.POOL_URL
-    if (poolUrl) {
+    const poolUrl = process.env.XXOO_HOST;
+
+    if (usePool && poolUrl) {
         const prefix = `${poolUrl}/${env}`
         const url = restful ? `${prefix}/${randomNum}` : `${prefix}?num=${randomNum}`
         let shareCodesRes = req('GET', url).getBody();
@@ -33,6 +39,9 @@ function getCodes(idx, env, randomNum = 20) {
         res = shareCodesRes;
     } else {
         res = {code: 200, data: mergeCodes}
+        if (useLocl === false && usePool === false) {
+            console.log(`\n ============= 助力配置：不助力 ==============\n`)
+        }
     }
     return res;
 }
