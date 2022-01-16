@@ -32,21 +32,21 @@
 - 不开启任何助力
 
     
-    - HELP_LOCAL = false        关闭自助和定向助力
-    - HELP_POOL = false         关闭给池中助力
+     HELP_LOCAL = false        关闭自助和定向助力
+     HELP_POOL = false         关闭给池中助力
 
 
 - 只自助和定向助力
 
 
-    - xxoo池原本的配置，配置方式参考xxoo文档
-    - XXOO_RANDOM = false           关闭xxoo池的随机助力
-    - HELP_POOL = false             关闭本仓库的给池中助力
+     xxoo池原本的配置，配置方式参考xxoo文档
+     XXOO_RANDOM = false           关闭xxoo池的随机助力
+     HELP_POOL = false             关闭本仓库的给池中助力
 
 - 开启自助也开启给池中助力
   
 
-    - xxoo池原本的配置，配置方式参考xxoo文档
+     xxoo池原本的配置，配置方式参考xxoo文档
 
 
 # 支持的池列表
