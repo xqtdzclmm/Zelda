@@ -22,8 +22,8 @@
 |  变量   |  必填  |  值 | 说明 | 
 |  ----  | ----  | ----| ----  |
 | XXOO助力池的环境变量|否| - | 本项目和xxoo助力池独立，但是要用xxoo助力池，就需要配置xxoo的参数 |
-| HELP_LOCAL|否|true或者false|是否开启自助和定向助力|
-| HELP_POOL|否|默认true,true或者false|是否开启助力池|
+| HELP_LOCAL|否|true或者false|是否开启自助和定向助力,入要定向助力，配置方式参考xxoo说明|
+| HELP_POOL|否|默认true,true或者false|是否开启给池中助力|
 
 # 不同场景需求的环境变量配置方式
 

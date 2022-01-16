@@ -15,8 +15,8 @@ function getCodes(idx, env, randomNum = 20) {
     let res = {};
     let mergeCodes = [];
 
-    let useLocal = process.env.HELP_LOCAL === 'false'?false:true;
-    let usePool = process.env.HELP_POOL === 'false'?false:true;
+    let useLocal = process.env.HELP_LOCAL !== 'false';
+    let usePool = process.env.HELP_POOL !== 'false';
 
     if (useLocal) {
         mergeCodes = getLocalCodes(idx, env)
